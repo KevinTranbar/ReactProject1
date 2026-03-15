@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../supabaseClient';
-import styles from './OnlineUsers.module.css';
+import { supabase } from '../supabaseClient'
+import styles from './OnlineUsers.module.css'
 
 function OnlineUsers() {
 
