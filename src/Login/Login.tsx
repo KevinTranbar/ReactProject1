@@ -1,6 +1,6 @@
-import { supabase } from "../supabaseClient";
-import { useState, useEffect } from "react";
-import styles from "./Login.module.css";
+import { supabase } from "../supabaseClient"
+import { useState, useEffect } from "react"
+import styles from "./Login.module.css"
 
 interface loginProps {
     setLoggedInProp: (value: boolean) => void

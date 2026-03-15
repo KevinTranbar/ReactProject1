@@ -1,8 +1,8 @@
-import { supabase } from "../supabaseClient";
-import { useEffect } from "react";
-import styles from "./DashBoard.module.css";
-import List from "./List";
-import OnlineUsers from "../OnlineUsers/OnlineUsers";
+import { supabase } from "../supabaseClient"
+import { useEffect } from "react"
+import styles from "./DashBoard.module.css"
+import List from "./List"
+import OnlineUsers from "../OnlineUsers/OnlineUsers"
 
 interface dashBoardProps {
     setLoggedInProp: (value: boolean) => void
