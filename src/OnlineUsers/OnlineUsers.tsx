@@ -7,16 +7,17 @@ function OnlineUsers() {
     const [users, setUsers] = useState<any[]>([])
 
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            let email: any;
-            let displayName: any;
-            if (session) {
-                email = session.user.email; //Gets email from user session
-                displayName = email.split("@")[0];
-            }
-            else displayName = "Guest";
+        let supabaseChannel: any;
 
-            const supabaseChannel = supabase.channel("OnlineUsers")
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            let displayName: any = "Guest";
+
+            if (session) {
+                const email = session.user.email; //Gets email from user session
+                if (email) displayName = email.split("@")[0];
+            }
+
+            supabaseChannel = supabase.channel("OnlineUsers")
                 .on("presence", { //Looks at users
                     event: "sync", //Activates when changes in users
                 }, () => { //Doesn't run until change in users
@@ -27,11 +28,11 @@ function OnlineUsers() {
                     if (status === "SUBSCRIBED") //When successful subscribe -> user connect to channel
                         await supabaseChannel.track({ user: displayName }); //Triggers sync event above (connects user to channel)
                 });
+        });
 
-            return () => {
-                supabase.removeChannel(supabaseChannel);
-            }
-        })
+        return () => {
+            if (supabaseChannel) supabase.removeChannel(supabaseChannel);
+        }
     }, [])
 
     return (
