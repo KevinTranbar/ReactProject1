@@ -1,2 +1,3 @@
 Future Plans for this project
 - Add a drag and drog feature for the list to move up/down
+- Learn tanStack Query
