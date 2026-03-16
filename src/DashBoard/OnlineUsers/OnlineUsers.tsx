@@ -10,7 +10,7 @@ function OnlineUsers() {
         let supabaseChannel: any;
 
         supabase.auth.getSession().then(({ data: { session } }) => {
-            let displayName: any = "Guest";
+            let displayName: string = "Guest";
 
             if (session) {
                 const email = session.user.email; //Gets email from user session
