@@ -1,0 +1,18 @@
+List.tsx
+Bug 1:
+Order was being updated both locally in the program and in the database. 
+This became redundant once a realtime channel was set up — the channel 
+automatically fetches fresh data (including updated Order values) from 
+the database on every change. Before the channel existed, updating Order 
+locally was necessary because otherwise the next move operation would 
+read stale Order values and send incorrect data to the database.
+
+Bug 2:
+Moving an item triggered two separate database updates (one per item being swapped). 
+The realtime channel fired once per update, meaning it triggered twice 
+per move. Between the two triggers, only one of the two Order values 
+had been updated in the database, causing the list to briefly appear 
+in the wrong order before the second trigger corrected it. The fix 
+was to remove the local optimistic setList call from the move functions 
+and let the channel handle all UI updates, eliminating the conflict 
+between the two render sources.
