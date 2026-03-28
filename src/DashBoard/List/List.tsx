@@ -31,7 +31,7 @@ function List() {
                     .select("*")
                     .order("Order", { ascending: true })
                     .then(({ data }) => {
-                        setList(data ?? []) //If data is null, use empty array instead
+                        setList(data ?? []) //If data is null, use empty array instead / Re-renders new list
                     });
             })
             .subscribe();
@@ -63,32 +63,24 @@ function List() {
         if (index <= 0) return;
         const itemA = list[index];
         const itemB = list[index - 1];
-        //Update list for user
-        const updatedList = [...list];
-        updatedList[index] = { ...itemA, Order: itemB.Order };
-        updatedList[index - 1] = { ...itemB, Order: itemA.Order };
-        [updatedList[index - 1], updatedList[index]] = [updatedList[index], updatedList[index - 1]];
-        setList(updatedList);
 
         //Update list in database
-        await supabase.from("toDoList").update({ Order: itemB.Order }).eq("id", itemA.id);
-        await supabase.from("toDoList").update({ Order: itemA.Order }).eq("id", itemB.id);
+        await Promise.all([
+            supabase.from("toDoList").update({ Order: itemB.Order }).eq("id", itemA.id),
+            supabase.from("toDoList").update({ Order: itemA.Order }).eq("id", itemB.id),
+        ])
     }
 
     async function moveItemDown(index: number) {
         if (index >= list.length - 1) return;
         const itemA = list[index];
         const itemB = list[index + 1];
-        //Update list for user
-        const updatedList = [...list];
-        updatedList[index] = { ...itemA, Order: itemB.Order };
-        updatedList[index + 1] = { ...itemB, Order: itemA.Order };
-        [updatedList[index + 1], updatedList[index]] = [updatedList[index], updatedList[index + 1]];
-        setList(updatedList);
 
         //Update list in database
-        await supabase.from("toDoList").update({ Order: itemB.Order }).eq("id", itemA.id);
-        await supabase.from("toDoList").update({ Order: itemA.Order }).eq("id", itemB.id);
+        await Promise.all([
+            supabase.from("toDoList").update({ Order: itemB.Order }).eq("id", itemA.id),
+            supabase.from("toDoList").update({ Order: itemA.Order }).eq("id", itemB.id),
+        ])
     }
 
     return (
